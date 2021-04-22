@@ -6,6 +6,7 @@ import com.gyc.community.dao.UserMapper;
 import com.gyc.community.entity.DiscussPost;
 import com.gyc.community.entity.LoginTicket;
 import com.gyc.community.entity.User;
+import com.gyc.community.util.CommunityUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -61,7 +62,7 @@ public class MapperTests {
         int i1 = userMapper.updateHeader(150, "http://www.nowcoder.com/102.png");
         System.out.println(i1);
 
-        int i2 = userMapper.updatePassword(150, "0000");
+        int i2 = userMapper.updatePassword(151, CommunityUtil.md5("111"+"16cbb"));
         System.out.println(i2);
 
     }
