@@ -1,5 +1,6 @@
 package com.gyc.community.controller;
 
+import com.gyc.community.annotation.LoginRequired;
 import com.gyc.community.entity.User;
 import com.gyc.community.service.UserService;
 import com.gyc.community.util.CommunityUtil;
@@ -50,7 +51,7 @@ public class UserController {
 
 
 
-
+    @LoginRequired
     @RequestMapping(path = "/setting",method = RequestMethod.GET)
     public String getSettingPage(){
         return "/site/setting";
@@ -58,6 +59,7 @@ public class UserController {
 
 
     //上传文件的请求
+    @LoginRequired
     @RequestMapping(path = "/upload",method = RequestMethod.POST)
     public String uploadHeader(MultipartFile headerImg, Model model){
         if(headerImg == null){
