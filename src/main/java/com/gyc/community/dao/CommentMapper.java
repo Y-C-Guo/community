@@ -13,4 +13,7 @@ public interface CommentMapper {
 
     //查询评论的数量
     int selectCountByEntity(int entityType,int entityId);
+
+    //增加评论
+    int insertComment(Comment comment);
 }
