@@ -27,6 +27,7 @@ public class DiscussPostService {
         return discussPostMapper.selectDiscussPostRows(userId);
     }
 
+    //发帖子
     public int addDiscussPost(DiscussPost post){
         //空帖子应该不能发
         if(post == null){
@@ -41,6 +42,11 @@ public class DiscussPostService {
 
         return discussPostMapper.insertDiscussPost(post);
 
+    }
+
+    //查询帖子
+    public DiscussPost findDiscussPostById(int id){
+        return discussPostMapper.selectDiscussPostById(id);
     }
 
 }
