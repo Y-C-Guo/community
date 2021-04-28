@@ -43,6 +43,7 @@ public class DiscussPostController implements CommunityConstant {
         if(user==null){
             return CommunityUtil.getJSONString(403,"你还没有登录哦");
         }
+        //标题和内容为空默认不能发
         if(StringUtils.isBlank(title)||StringUtils.isBlank(content))
             return CommunityUtil.getJSONString(1,"标题或内容不能为空");
 
@@ -54,7 +55,6 @@ public class DiscussPostController implements CommunityConstant {
         discussPostService.addDiscussPost(post);
         //报错的情况，将来统一处理
         return CommunityUtil.getJSONString(0,"发布成功");
-
     }
 
     //查询帖子

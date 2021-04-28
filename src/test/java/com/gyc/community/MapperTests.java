@@ -2,9 +2,11 @@ package com.gyc.community;
 
 import com.gyc.community.dao.DiscussPostMapper;
 import com.gyc.community.dao.LoginTicketMapper;
+import com.gyc.community.dao.MessageMapper;
 import com.gyc.community.dao.UserMapper;
 import com.gyc.community.entity.DiscussPost;
 import com.gyc.community.entity.LoginTicket;
+import com.gyc.community.entity.Message;
 import com.gyc.community.entity.User;
 import com.gyc.community.util.CommunityUtil;
 import org.junit.jupiter.api.Test;
@@ -26,6 +28,9 @@ public class MapperTests {
 
     @Autowired
     private LoginTicketMapper loginTicketMapper;
+
+    @Autowired
+    private MessageMapper messageMapper;
 
     @Test
     public void testSelectUser(){
@@ -116,6 +121,23 @@ public class MapperTests {
         post.setCreateTime(new Date());
         discussPostMapper.insertDiscussPost(post);
 
+    }
+
+    @Test
+    public void testSelectLetters(){
+        List<Message> messages = messageMapper.selectConversations(111, 0, 20);
+        for (Message message : messages) {
+            System.out.println(message);
+        }
+        int i = messageMapper.selectConversationCount(111);
+        System.out.println(i);
+        List<Message> messages1 = messageMapper.selectLetters("111_112", 0, 10);
+        for (Message message : messages1) {
+            System.out.println(message);
+        }
+
+        System.out.println(messageMapper.selectLetterCount("111_112"));
+        System.out.println(messageMapper.selectLetterUnreadCount(131,"111_131"));
     }
 
 
