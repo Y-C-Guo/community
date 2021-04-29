@@ -1,10 +1,13 @@
 package com.gyc.community.controller;
 
 import com.gyc.community.entity.DiscussPost;
+import com.gyc.community.entity.Message;
 import com.gyc.community.entity.Page;
 import com.gyc.community.entity.User;
 import com.gyc.community.service.DiscussPostService;
+import com.gyc.community.service.MessageService;
 import com.gyc.community.service.UserService;
+import com.gyc.community.util.HostHolder;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +28,12 @@ public class HomeController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MessageService messageService;
+
+    @Autowired
+    private HostHolder hostHolder;
 
     @RequestMapping(path = "/index",method = RequestMethod.GET)
     public String getIndexPage(Model model, Page page){
@@ -50,7 +59,21 @@ public class HomeController {
             }
         }
 
+        //未读的私信数量
+        User user = hostHolder.getUser();
+        if(user!=null){
+            int letterUnreadCount = messageService.findLetterUnreadCount(user.getId(),null);
+            model.addAttribute("letterUnreadCount",letterUnreadCount);
+        }
+
+
         model.addAttribute("discussPosts",discussPosts);
         return "/index";
+    }
+
+
+    @RequestMapping(path = "/error",method = RequestMethod.GET)
+    public String getErrorPage(){
+        return "/error/500";
     }
 }

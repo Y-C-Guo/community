@@ -25,5 +25,8 @@ public interface MessageMapper {
     int selectLetterUnreadCount(int userId,String conversationId);
 
     //修改私信的状态
-    int updateLetterStatus(int userId,String conversationId,int status);
+    int updateStatus(List<Integer> ids,int status);
+
+    //新增一个消息
+    int insertMessage(Message message);
 }

@@ -2,8 +2,10 @@ package com.gyc.community.service;
 
 import com.gyc.community.dao.MessageMapper;
 import com.gyc.community.entity.Message;
+import com.gyc.community.util.SensitiveFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.List;
 
@@ -13,6 +15,9 @@ public class MessageService {
 
     @Autowired
     private MessageMapper messageMapper;
+    @Autowired
+    private SensitiveFilter sensitiveFilter;
+
 
     public List<Message> findConversations(int userId,int offset,int limit){
         return messageMapper.selectConversations(userId,offset,limit);
@@ -36,7 +41,15 @@ public class MessageService {
         return messageMapper.selectLetterUnreadCount(userId,conversationId);
     }
 
-    public int updateLetterStatus(int userId,String conversationId,int status){
-        return messageMapper.updateLetterStatus(userId,conversationId,status);
+    public int readMessage(List<Integer> ids){
+        return messageMapper.updateStatus(ids,1);
+    }
+    public int addMessage(Message message){
+        //过滤标签
+        message.setContent(HtmlUtils.htmlEscape(message.getContent()));
+        //过滤敏感词
+        message.setContent(sensitiveFilter.filter(message.getContent()));
+        return messageMapper.insertMessage(message);
+
     }
 }
