@@ -2,8 +2,10 @@ package com.gyc.community.controller;
 
 import com.gyc.community.annotation.LoginRequired;
 import com.gyc.community.entity.User;
+import com.gyc.community.service.FollowService;
 import com.gyc.community.service.LikeService;
 import com.gyc.community.service.UserService;
+import com.gyc.community.util.CommunityConstant;
 import com.gyc.community.util.CommunityUtil;
 import com.gyc.community.util.HostHolder;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +31,7 @@ import java.io.OutputStream;
 
 @Controller
 @RequestMapping(path = "/user")
-public class UserController {
+public class UserController implements CommunityConstant {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -50,6 +52,9 @@ public class UserController {
 
     @Autowired
     private LikeService likeService;
+
+    @Autowired
+    private FollowService followService;
 
 
 
@@ -176,6 +181,22 @@ public class UserController {
         //点赞数量
         int likeCount = likeService.findUserLikeCount(userId);
         model.addAttribute("likeCount",likeCount);
+
+        //关注数量
+        long followeeCount = followService.findFolloweeCount(userId, ENTITY_TYPE_USER);
+        model.addAttribute("followeeCount",followeeCount);
+        //粉丝数量
+        long followerCount = followService.findFollowerCount(ENTITY_TYPE_USER, userId);
+        model.addAttribute("followerCount",followerCount);
+        //是否已关注
+        //先判断用户是否已经登录
+        boolean hasFollowed = false;
+        if(hostHolder.getUser()!=null){
+            hasFollowed = followService.hasFollowed(hostHolder.getUser().getId(),ENTITY_TYPE_USER,userId);
+
+        }
+        model.addAttribute("hasFollowed",hasFollowed);
+
         return "/site/profile";
     }
 
