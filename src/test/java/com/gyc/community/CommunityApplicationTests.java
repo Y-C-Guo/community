@@ -2,7 +2,6 @@ package com.gyc.community;
 
 import com.gyc.community.dao.AlphaDao;
 import com.gyc.community.service.AlphaService;
-import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;

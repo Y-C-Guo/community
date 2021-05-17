@@ -1,8 +1,11 @@
 package com.gyc.community.event;
 
 import com.alibaba.fastjson.JSONObject;
+import com.gyc.community.entity.DiscussPost;
 import com.gyc.community.entity.Event;
 import com.gyc.community.entity.Message;
+import com.gyc.community.service.DiscussPostService;
+import com.gyc.community.service.ElasticsearchService;
 import com.gyc.community.service.MessageService;
 import com.gyc.community.util.CommunityConstant;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -22,6 +25,10 @@ public class EventConsumer implements CommunityConstant {
     private static final Logger logger = LoggerFactory.getLogger(EventConsumer.class);
     @Autowired
     private MessageService messageService;
+    @Autowired
+    private DiscussPostService discussPostService;
+    @Autowired
+    private ElasticsearchService elasticsearchService;
 
     @KafkaListener(topics = {TOPIC_COMMENT,TOPIC_LIKE,TOPIC_FOLLOW})
     public void handleCommentMessage(ConsumerRecord record){
@@ -59,6 +66,28 @@ public class EventConsumer implements CommunityConstant {
 
 
 
+    }
+
+
+    //消费发帖事件
+    @KafkaListener(topics = {TOPIC_PUBLISH})
+    public void handlerPublishMessage(ConsumerRecord record){
+        if (record == null || record.value() == null){
+            logger.error("消息的内容为空");
+            return;
+        }
+        Event event = JSONObject.parseObject(record.value().toString(), Event.class);
+        if(event == null){
+            logger.error("消息格式错误");
+            return;
+        }
+
+        //非空并且格式正确
+        //查询帖子
+        DiscussPost post = discussPostService.findDiscussPostById(event.getEntityId());
+
+        //es服务器存储
+        elasticsearchService.saveDiscussPost(post);
     }
 
 }
