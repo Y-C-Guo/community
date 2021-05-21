@@ -163,4 +163,61 @@ public class DiscussPostController implements CommunityConstant {
 
     }
 
+    //置顶
+    @RequestMapping(path = "/top",method = RequestMethod.POST)
+    @ResponseBody//异步请求
+    public String setTop(int id){
+        discussPostService.updateType(id,1);
+        //同步到es服务器里
+
+        //触发发帖事件
+        Event event = new Event()
+                .setTopic(TOPIC_PUBLISH)
+                .setUserId(hostHolder.getUser().getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(id);
+
+        eventProducer.fireEvent(event);
+        return CommunityUtil.getJSONString(0);
+
+    }
+
+    //加精
+    @RequestMapping(path = "/wonderful",method = RequestMethod.POST)
+    @ResponseBody//异步请求
+    public String setWonderful(int id){
+        discussPostService.updateStatus(id,1);
+        //同步到es服务器里
+
+        //触发发帖事件
+        Event event = new Event()
+                .setTopic(TOPIC_PUBLISH)
+                .setUserId(hostHolder.getUser().getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(id);
+
+        eventProducer.fireEvent(event);
+        return CommunityUtil.getJSONString(0);
+
+    }
+
+    //删除
+    @RequestMapping(path = "/delete",method = RequestMethod.POST)
+    @ResponseBody//异步请求
+    public String setDelete(int id){
+        discussPostService.updateStatus(id,2);
+        //同步到es服务器里
+
+        //触发删帖事件
+        Event event = new Event()
+                .setTopic(TOPIC_DELETE)
+                .setUserId(hostHolder.getUser().getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(id);
+
+        eventProducer.fireEvent(event);
+        return CommunityUtil.getJSONString(0);
+
+    }
+
 }
