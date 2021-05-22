@@ -1,9 +1,6 @@
 package com.gyc.community.config;
 
-import com.gyc.community.controller.interceptor.AlphaInterceptor;
-import com.gyc.community.controller.interceptor.LoginRequiredInterceptor;
-import com.gyc.community.controller.interceptor.LoginTicketInterceptor;
-import com.gyc.community.controller.interceptor.MessageInterceptor;
+import com.gyc.community.controller.interceptor.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -15,6 +12,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private AlphaInterceptor alphaInterceptor;
     @Autowired
     private LoginTicketInterceptor loginTicketInterceptor;
+
+    @Autowired
+    private DataInterceptor dataInterceptor;
 
 //    @Autowired
 //    private LoginRequiredInterceptor loginRequiredInterceptor;
@@ -36,5 +36,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //                .excludePathPatterns("/**/*.css","/**/*.js","/**/*.png","/**/*.jpg","/**/*.jpeg");
         registry.addInterceptor(messageInterceptor)
                 .excludePathPatterns("/**/*.css","/**/*.js","/**/*.png","/**/*.jpg","/**/*.jpeg");
+        registry.addInterceptor(dataInterceptor)
+                .excludePathPatterns("/**/*.css","/**/*.js","/**/*.png","/**/*.jpg","/**/*.jpeg");
+
     }
 }
