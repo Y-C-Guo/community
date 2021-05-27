@@ -7,8 +7,12 @@ import com.gyc.community.entity.DiscussPost;
 import com.gyc.community.entity.User;
 import com.gyc.community.util.CommunityUtil;
 import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
@@ -25,6 +29,8 @@ import java.util.Date;
 @Service
 @Scope("singleton")//默认时单例模式，prototype每get一个就创建一个实例
 public class AlphaService {
+
+    private static final Logger logger = LoggerFactory.getLogger(AlphaService.class);
 
     //service 层调用dao
     @Autowired
@@ -109,5 +115,17 @@ public class AlphaService {
                 return "ok";
             }
         });
+    }
+
+    //让该方法在多线程环境下，被异步的调用
+    @Async
+    public void execute1(){
+        logger.debug("execute1");
+    }
+
+
+    @Scheduled(initialDelay = 10000,fixedRate = 1000)
+    public void execute2(){
+        logger.debug("execute2");
     }
 }
