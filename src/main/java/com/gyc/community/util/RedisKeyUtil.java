@@ -1,5 +1,6 @@
 package com.gyc.community.util;
 
+import org.springframework.security.access.method.P;
 import sun.security.krb5.internal.Ticket;
 
 public class RedisKeyUtil {
@@ -15,6 +16,7 @@ public class RedisKeyUtil {
     private static final String PREFIX_USER = "user";
     private static final String PREFIX_UV = "uv";
     private static final String PREFIX_DAU = "dau";
+    private static final String PREFIX_POST = "post";
 
     //生成某个实体的赞
     public static String getEntityLikeKey(int entityType,int entityId){
@@ -75,6 +77,11 @@ public class RedisKeyUtil {
     //区间活跃用户
     public static String getDAUKey(String startDate,String endData){
         return PREFIX_DAU + SPLIT + startDate + SPLIT + endData;
+    }
+
+    //帖子分数
+    public static String getPostScoreKey(){
+        return PREFIX_POST + SPLIT + "score";
     }
 
 
